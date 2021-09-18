@@ -2,20 +2,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Dtos;
+using API.Errors;
 using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 
 namespace API.Controllers
 {
 
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ProductsController : ControllerBase
+    public class ProductsController : BaseApiController
     {
 
 
@@ -65,16 +65,24 @@ namespace API.Controllers
             var spec = new ProductsTypesBrandsSpec();
             var products = await _productsRepo.GetListSpecAsync(spec);
 
-           // var dtos = products.Select(product => _mapper.Map<Product,ProductToReturnDto>(product)).ToList();
+            // var dtos = products.Select(product => _mapper.Map<Product,ProductToReturnDto>(product)).ToList();
 
-            return Ok(_mapper.Map<List<Product>,List<ProductToReturnDto>>(products));
+            return Ok(_mapper.Map<List<Product>, List<ProductToReturnDto>>(products));
         }
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
         {
             var spec = new ProductsTypesBrandsSpec(id);
             var product = await _productsRepo.GetEntityWithSpec(spec);
-            var productDto =_mapper.Map<Product,ProductToReturnDto>(product);// GetProductToReturnDto(product);
+
+            if (product == null)
+            {
+
+                return NotFound(new ApiResponse(404));
+            }
+            var productDto = _mapper.Map<Product, ProductToReturnDto>(product);// GetProductToReturnDto(product);
             //var product = await _productsRepo.GetByIdAsync(id);
 
             return Ok(productDto);
@@ -96,22 +104,6 @@ namespace API.Controllers
             return Ok(brands);
         }
 
-        private ProductToReturnDto GetProductToReturnDto(Product product)
-        {
-            return new ProductToReturnDto
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Description = product.Description,
-                Price = product.Price,
-                PictureUrl = product.PictureUrl,
-                ProductType = product.ProductType.Name,
-                ProductBrand = product.ProductBrand.Name
-
-            };
-
-
-        }
 
     }
 }
