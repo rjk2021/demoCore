@@ -35,13 +35,18 @@ namespace Infrastructure.Data
         }
         public async Task<List<T>> GetListSpecAsync(ISpecification<T> spec)
         {
-           return await ApplySpecification(spec).ToListAsync();
+            return await ApplySpecification(spec).ToListAsync();
         }
-
+        public async Task<int> CountAsync(ISpecification<T> spec)
+        {
+            return await ApplySpecification(spec).CountAsync();
+        }
         private IQueryable<T> ApplySpecification(ISpecification<T> spec)
         {
 
             return SpecificationEvaluator<T>.GetQueryable(_contxet.Set<T>().AsQueryable(), spec);
         }
+
+
     }
 }
