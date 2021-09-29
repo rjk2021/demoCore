@@ -8,6 +8,7 @@ using API.Helpers;
 using API.Middleware;
 using Core.Interfaces;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -56,7 +57,21 @@ namespace API
 
 
             });
-
+        //     services.AddAuthentication(
+        //  CertificateAuthenticationDefaults.AuthenticationScheme)
+        //  .AddCertificate();
+            // services.AddCors(options =>
+            //     {
+            //         options.AddPolicy("AllowAll",
+            //             builder =>
+            //             {
+            //                 builder
+            //                 .AllowAnyOrigin()
+            //                 .AllowAnyMethod()
+            //                 .AllowAnyHeader()
+            //                 .AllowCredentials();
+            //             });
+            //     });
 
         }
 
@@ -64,8 +79,11 @@ namespace API
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
+           // app.UseAuthentication();
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseSwaggerDocConfigure();
+
+              app.UseHttpsRedirection();
             //   app.UseSwagger();
             //     app.UseSwaggerUI(c=>c.SwaggerEndpoint("/swagger/v1/swagger.json","API v1"));
             if (env.IsDevelopment())
@@ -81,10 +99,10 @@ namespace API
 
             app.UseRouting();
             app.UseStaticFiles();
-
-            app.UseAuthorization();
             app.UseCors("CorsPolicy");
-
+            app.UseAuthorization();
+            //app.UseCors("CorsPolicy");
+            //app.UseCors();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
