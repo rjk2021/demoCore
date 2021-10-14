@@ -67,6 +67,9 @@ namespace API.Controllers
 
 
             var spec = new ProductsTypesBrandsSpec(productParams);
+            Console.WriteLine(productParams.PageIndex);
+            Console.WriteLine(productParams.PageSize);
+            Console.WriteLine("Skip numbres {0}",productParams.PageSize*(productParams.PageIndex-1));
 
             var countSpec=new ProductWIthFilterForCountSpec(productParams);
 
