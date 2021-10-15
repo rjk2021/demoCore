@@ -4,7 +4,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
-    "forceConsistentCasingInFileNames": true,
+    "forceConsistentCasingInFileNames": false,
     "strict": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
@@ -21,6 +21,7 @@
       "es2018",
       "dom"
     ]
+   
   },
   "angularCompilerOptions": {
    
@@ -29,6 +30,7 @@
     "strictTemplates": true,
     "strictDomEventsTypes":false,
     "enableI18nLegacyMessageIdFormat": false
+    
    
   }
 }

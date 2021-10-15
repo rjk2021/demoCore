@@ -35,14 +35,19 @@
         </section>
         <section class="col-9">
             <div class="d-flex justify-content-between align-items-center">
+                <app-paging-header
+                    [totalCount]="this.totalCount"
+                    [pageNumber]="this.shopParams.pageNumber"
+                    [pageSize]="this.shopParams.pageSize"
 
-                <header>
-                    <span>Showing <strong>10</strong> of <strong>16 </strong> Results</span>
-                </header>
+
+                ></app-paging-header>
+
+              
                 <div class="form-inline mt-2">
-                    <input type="text" class="form-control mr-2" style="width:300px;" placeholder="Search">
-                    <button class="btn btn-outline-primary my-2 mr-2">Search</button>
-                    <button class="btn btn-outline-success my-2">Reset</button>
+                    <input (keyup.enter)="OnSearch()" type="text" class="form-control mr-2" #search style="width:300px;" placeholder="Search">
+                    <button (click)="OnSearch()" class="btn btn-outline-primary my-2 mr-2">Search</button>
+                    <button (click)="OnReset()" class="btn btn-outline-success my-2">Reset</button>
                 </div>
             </div>
 
@@ -52,17 +57,12 @@
                 </div>
 
             </div>
-            <div class="d-flex justify-content-center">
-                <pagination [boundaryLinks]="true" 
-                [totalItems]="this.totalCount" 
-                (pageChanged)="OnPageChanged($event)"
-                [itemsPerPage]="this.shopParams.pageSize"
-                previousText="&lsaquo;" 
-                nextText="&rsaquo;"
-                firstText="&laquo;" 
-                lastText="&raquo;">
-
-            </pagination>
+            <div class="d-flex justify-content-center" *ngIf="this.totalCount && this.totalCount>0">
+           <app-pagerfooter
+           [totalCount]="this.totalCount"
+           [pageSize]="this.shopParams.pageSize"
+           (pageChanged)="OnPageChanged($event)"
+           ></app-pagerfooter>
             </div>
            
         </section>
